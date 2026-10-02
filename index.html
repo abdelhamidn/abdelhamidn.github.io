@@ -1,23 +1,83 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>abdelhamidn@github:~$</title>
-  <meta name="description" content="Abdelhamid Noira — Cloud &amp; DevOps Project Manager | R&amp;D AI-Oriented Software Engineer. Interactive terminal portfolio.">
-  <meta name="theme-color" content="#22272e">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%2322272e'/><text x='50' y='68' font-size='56' text-anchor='middle' font-family='monospace' font-weight='700' fill='%2339d353'>&gt;_</text></svg>">
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>abdelhamidn@github ~ interactive terminal</title>
+<meta name="description" content="Abdelhamid NOIRA — Cloud &amp; DevOps Project Manager and R&amp;D AI-oriented software engineer. Interactive terminal-style portfolio with live GitHub contribution stats." />
+<meta name="theme-color" content="#0d1117" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Abdelhamid NOIRA — interactive terminal" />
+<meta property="og:description" content="Cloud &amp; DevOps Project Manager · R&amp;D AI-Oriented Software Engineer. Type help to explore." />
+<meta property="og:url" content="https://abdelhamidn.github.io/" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230d1117'/><text x='50' y='68' font-size='56' text-anchor='middle' font-family='monospace' font-weight='700' fill='%2339d353'>&gt;_</text></svg>" />
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <canvas id="matrix" aria-hidden="true"></canvas>
-  <main id="term" class="term" tabindex="-1" aria-live="polite">
-    <div id="out"></div>
-    <form id="line" class="line" autocomplete="off">
-      <label for="in" class="prompt"><span class="u">abdelhamidn@github</span> <span class="p">~</span> <span class="d">$</span></label>
-      <input id="in" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="terminal input">
+
+<canvas id="matrixCanvas" aria-hidden="true"></canvas>
+
+<div class="wrap">
+
+  <header class="hero">
+    <h1 class="sr-only">Abdelhamid NOIRA</h1>
+<pre class="banner banner-wide" aria-hidden="true">    ___    ____  ____  ________    __  _____    __  ___________     _   ______  ________  ___
+   /   |  / __ )/ __ \/ ____/ /   / / / /   |  /  |/  /  _/ __ \   / | / / __ \/  _/ __ \/   |
+  / /| | / __  / / / / __/ / /   / /_/ / /| | / /|_/ // // / / /  /  |/ / / / // // /_/ / /| |
+ / ___ |/ /_/ / /_/ / /___/ /___/ __  / ___ |/ /  / // // /_/ /  / /|  / /_/ // // _, _/ ___ |
+/_/  |_/_____/_____/_____/_____/_/ /_/_/  |_/_/  /_/___/_____/  /_/ |_/\____/___/_/ |_/_/  |_|</pre>
+<pre class="banner banner-stack" aria-hidden="true">    ___    ____  ____  ________    __  _____    __  ___________
+   /   |  / __ )/ __ \/ ____/ /   / / / /   |  /  |/  /  _/ __ \
+  / /| | / __  / / / / __/ / /   / /_/ / /| | / /|_/ // // / / /
+ / ___ |/ /_/ / /_/ / /___/ /___/ __  / ___ |/ /  / // // /_/ /
+/_/  |_/_____/_____/_____/_____/_/ /_/_/  |_/_/  /_/___/_____/
+
+                     _   ______  ________  ___
+                    / | / / __ \/  _/ __ \/   |
+                   /  |/ / / / // // /_/ / /| |
+                  / /|  / /_/ // // _, _/ ___ |
+                 /_/ |_/\____/___/_/ |_/_/  |_|</pre>
+    <div class="tagline">Cloud &amp; DevOps Project Manager · R&amp;D AI-Oriented Software Engineer</div>
+  </header>
+
+  <main class="window">
+    <div class="titlebar" aria-hidden="true">
+      <span class="dot" style="background:var(--red)"></span>
+      <span class="dot" style="background:var(--yellow)"></span>
+      <span class="dot" style="background:var(--mac-green)"></span>
+      <div class="label">abdelhamidn@github: ~</div>
+    </div>
+    <div class="term" id="term" role="log" aria-label="Terminal output"></div>
+    <form class="inputRow" id="line" autocomplete="off">
+      <label class="prompt-tag" for="cmdInput">abdelhamidn@github:~$</label>
+      <div class="field">
+        <div class="typed" id="typed" aria-hidden="true"></div>
+        <input id="cmdInput" type="text" enterkeyhint="go" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Terminal command input" />
+      </div>
     </form>
   </main>
-  <script src="app.js"></script>
+
+  <p class="hint">type <kbd data-cmd="help">help</kbd> to see commands · try <kbd data-cmd="contributions">contributions</kbd>, <kbd data-cmd="projects">projects</kbd>, or <kbd data-cmd="matrix">matrix</kbd></p>
+
+  <noscript>
+    <p class="hint">This page is an interactive terminal and needs JavaScript. Meanwhile, find me on the links below.</p>
+  </noscript>
+
+  <footer>
+    <div class="links">
+      <a href="https://abdelhamid.noira.net" target="_blank" rel="noopener">portfolio</a>·
+      <a href="https://github.com/abdelhamidn" target="_blank" rel="noopener">github</a>·
+      <a href="https://linkedin.com/in/abdelhamidn" target="_blank" rel="noopener">linkedin</a>·
+      <a href="mailto:abdelhamid@noira.net">email</a>
+    </div>
+    <div>rendered client-side, no build step · live GitHub contribution data</div>
+  </footer>
+
+</div>
+
+<div id="tooltip" role="tooltip"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
