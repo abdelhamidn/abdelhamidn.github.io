@@ -83,9 +83,27 @@ a:hover, a:focus-visible { text-decoration: underline; }
 .legend .cell:hover { transform: none; outline: none; }
 #tooltip { position: fixed; pointer-events: none; background: #1c2128; border: 1px solid var(--frame); color: var(--white); font-size: 11.5px; padding: 4px 8px; border-radius: 6px; display: none; z-index: 50; box-shadow: 0 8px 20px rgba(0, 0, 0, .5); }
 
-/* ---- ascii output (photo / banner) -------------------------------------- */
-.ascii, .banner.in-term { margin: 4px 0; font-family: inherit; color: var(--green); white-space: pre; line-height: 1.1; overflow: hidden; width: auto; max-width: none; }
-.banner.in-term { line-height: 1.15; }
+/* ---- ascii output (banner / portrait / wordmark) ------------------------- */
+.banner.in-term, .portrait, .wordmark { margin: 4px 0; font-family: inherit; white-space: pre; line-height: 1.1; overflow: hidden; width: auto; max-width: none; }
+.banner.in-term { color: var(--green); line-height: 1.15; }
+.wordmark { color: var(--white); }
+
+/* ---- whoami panels: two mini terminals --------------------------------- */
+.whoami { margin-top: 28px; }
+.pill { display: table; margin: 0 auto 14px; padding: 3px 10px; background: var(--bg2); border: 1px solid var(--frame); border-radius: 6px; font: 700 14px/1.5 var(--mono); color: var(--white); }
+.panels { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--frame); border-radius: 10px; }
+.panel { display: flex; min-width: 0; padding: 12px; }
+.panel + .panel { border-left: 1px solid var(--frame); }
+.panel .window { display: flex; flex: 1; flex-direction: column; min-width: 0; box-shadow: none; }
+.panel .titlebar .label { position: static; flex: 1; margin-right: 44px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mini-body { display: flex; flex: 1; align-items: center; justify-content: center; min-height: 0; padding: 10px 8px; }
+.mini-foot { padding: 4px 14px 12px; font-size: 11.5px; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mini-body .portrait, .mini-body .wordmark { margin: 0; }
+@media (max-width: 700px) {
+  .panels { grid-template-columns: 1fr; }
+  .panel + .panel { border-left: 0; border-top: 1px solid var(--frame); }
+  .panel .titlebar .label { margin-right: 0; font-size: 11px; }
+}
 
 /* ---- footer -------------------------------------------------------------- */
 footer { margin-top: 26px; text-align: center; color: var(--muted); font-size: 12px; }

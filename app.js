@@ -12,6 +12,7 @@
     email: "mailto:abdelhamid@noira.net",
   };
   const SNAP = window.SNAPSHOT || null; // baked fallbacks, see data.js
+  const WORDMARK = "ANO"; // text of the rotating 3D wordmark
 
   const $term = document.getElementById("term");
   const $in = document.getElementById("cmdInput");
@@ -60,6 +61,7 @@
     ["streak", "current / longest streak"],
     ["contact", "how to reach me"],
     ["photo", "ascii self-portrait"],
+    ["wordmark", "rotating 3D wordmark"],
     ["matrix", "toggle a little fun"],
     ["clear", "clear the terminal"],
   ];
@@ -290,17 +292,170 @@
     return w || 0.6;
   })();
 
-  // largest font size (up to `max`) at which a cols x rows block fits the terminal without scrolling sideways or off-screen
-  function fitFont(pre, cols, rows, max) {
-    const maxH = parseFloat(getComputedStyle($term).maxHeight) || innerHeight * 0.6;
-    const byWidth = ($term.clientWidth - 32) / (cols * EM * 1.02); // minus the .term padding
-    const byHeight = (maxH - 32 - 24) / (rows * 1.1); // leave room for the prompt line above
-    pre.style.fontSize = Math.max(3, Math.min(max, byWidth, byHeight)) + "px";
+  // Largest font size (up to `max`) at which a cols x rows block fits width x height px. The defaults are the
+  // terminal view, so output never scrolls sideways or off-screen. The final height is reserved up front, so
+  // animated output doesn't make the layout jump.
+  function fitFont(pre, cols, rows, max, lh = 1.1, width = $term.clientWidth - 32, height = (parseFloat(getComputedStyle($term).maxHeight) || innerHeight * 0.6) - 56) {
+    const size = Math.max(3, Math.min(max, width / (cols * EM * 1.02), height / (rows * lh)));
+    pre.style.fontSize = size + "px";
+    pre.style.height = rows * lh * size + "px";
+  }
+
+  // ---- portrait -----------------------------------------------------------
+  const PORTRAIT = SNAP && SNAP.portrait;
+
+  // one HTML string per row; runs of characters sharing a palette colour become a single <span>
+  function portraitRows() {
+    return PORTRAIT.chars.map((row, y) => {
+      let html = "", run = "", cur = null;
+      const flush = () => {
+        if (run) html += cur === null ? esc(run) : `<span style="color:${PORTRAIT.palette[parseInt(cur, 16)]}">${esc(run)}</span>`;
+        run = "";
+      };
+      for (let x = 0; x < row.length; x++) {
+        const c = PORTRAIT.colors[y][x];
+        if (row[x] !== " " && c !== cur) { flush(); cur = c; } // spaces have no ink, they just ride along
+        run += row[x];
+      }
+      flush();
+      return html;
+    });
+  }
+
+  async function paintPortrait(pre, animate) {
+    const rows = portraitRows();
+    if (!animate) { pre.innerHTML = rows.join("\n"); return; }
+    pre.innerHTML = "";
+    for (const r of rows) {
+      pre.insertAdjacentHTML("beforeend", r + "\n");
+      await sleep(26);
+    }
+  }
+
+  // ---- 3D wordmark --------------------------------------------------------
+  // The text is rasterised, extruded into a slab of voxels, rotated, projected with perspective and
+  // z-buffered into a character grid; the glyph picked for each cell depends on how the face it shows is lit.
+  const SHADES = " .:-=+*sS#%@";
+  const NORMALS = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]]; // face bits: +x -x +y -y front back
+
+  function wordmark3D(pre, text = WORDMARK) {
+    const COLS = 62, ROWS = 22, FOCAL = 120;
+    const S = 2, W = 52 * S, H = 28 * S, K = 8; // slab: 52 columns x 14 rows, 4 columns deep, 2 samples per column
+    const cv = document.createElement("canvas");
+    cv.width = W;
+    cv.height = H;
+    const g = cv.getContext("2d");
+    if (!g) return { cols: COLS, rows: ROWS, start() {}, stop() {}, still() { pre.textContent = text; } };
+    g.font = '900 100px "Arial Black", Impact, "Helvetica Neue", Arial, sans-serif';
+    if ("letterSpacing" in g) g.letterSpacing = "16px";
+    const m = g.measureText(text);
+    const left = -(m.actualBoundingBoxLeft || 0), ink = (m.actualBoundingBoxRight || m.width) - left, asc = m.actualBoundingBoxAscent || 72;
+    g.setTransform(W / ink, 0, 0, H / asc, -left * (W / ink), 0); // stretch to fill the slab: tall, narrow letters
+    g.fillText(text, 0, asc);
+    const px = g.getImageData(0, 0, W, H).data;
+    const on = (i, j) => i >= 0 && j >= 0 && i < W && j < H && px[(j * W + i) * 4 + 3] > 128;
+
+    const xs = [], ys = [], zs = [], faces = [];
+    for (let j = 0; j < H; j++) {
+      for (let i = 0; i < W; i++) {
+        if (!on(i, j)) continue;
+        const side = (on(i + 1, j) ? 0 : 1) | (on(i - 1, j) ? 0 : 2) | (on(i, j - 1) ? 0 : 4) | (on(i, j + 1) ? 0 : 8);
+        for (let k = 0; k < K; k++) {
+          const f = side | (k === K - 1 ? 16 : 0) | (k === 0 ? 32 : 0);
+          if (!f) continue; // buried voxels are never visible
+          xs.push((i - W / 2 + 0.5) / S);
+          ys.push((H / 2 - j - 0.5) / S);
+          zs.push((k - K / 2 + 0.5) / S);
+          faces.push(f);
+        }
+      }
+    }
+    const N = xs.length;
+    const X = Float32Array.from(xs), Y = Float32Array.from(ys), Z = Float32Array.from(zs), F = Uint8Array.from(faces);
+    const zbuf = new Float32Array(COLS * ROWS), pick = new Int32Array(COLS * ROWS);
+    const L = [-0.35, 0.4, 0.85].map((v, _, a) => v / Math.hypot(...a)); // light from the upper left, in front
+
+    function draw(t) {
+      const yaw = 0.6 * Math.sin(t * 0.9), pitch = 0.12 * Math.sin(t * 0.6 + 1);
+      const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
+      const lit = NORMALS.map(([nx, ny, nz]) => { // brightness of each face direction at this angle, -1 if it faces away
+        const x1 = nx * cy + nz * sy, z1 = -nx * sy + nz * cy;
+        const y2 = ny * cp - z1 * sp, z2 = ny * sp + z1 * cp;
+        return z2 > 0.02 ? 0.1 + 0.9 * Math.max(0, x1 * L[0] + y2 * L[1] + z2 * L[2]) ** 1.4 : -1;
+      });
+      zbuf.fill(-1e9);
+      pick.fill(-1);
+      for (let n = 0; n < N; n++) {
+        const x1 = X[n] * cy + Z[n] * sy, z1 = -X[n] * sy + Z[n] * cy;
+        const y2 = Y[n] * cp - z1 * sp, z2 = Y[n] * sp + z1 * cp;
+        const s = FOCAL / (FOCAL - z2);
+        const c = Math.round(COLS / 2 + x1 * s - 0.5), r = Math.round(ROWS / 2 - (y2 * s) / 2 - 0.5); // a row is twice as tall as a column is wide
+        if (c < 0 || r < 0 || c >= COLS || r >= ROWS) continue;
+        const idx = r * COLS + c;
+        if (z2 > zbuf[idx]) { zbuf[idx] = z2; pick[idx] = n; }
+      }
+      let out = "";
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const n = pick[r * COLS + c];
+          if (n < 0) { out += " "; continue; }
+          let v = 0.15;
+          for (let b = 0; b < 6; b++) if ((F[n] >> b) & 1 && lit[b] > v) v = lit[b];
+          v = Math.min(1, v * (0.8 + (0.4 * (zbuf[r * COLS + c] + 16)) / 32)); // nearer parts are brighter
+          out += SHADES[1 + Math.min(SHADES.length - 2, Math.floor(v * (SHADES.length - 1)))];
+        }
+        out += "\n";
+      }
+      pre.textContent = out;
+    }
+
+    let raf = 0, last = 0, running = false;
+    const loop = (now) => {
+      if (!pre.isConnected) running = false; // the output was cleared: stop spinning
+      if (!running) return;
+      raf = requestAnimationFrame(loop);
+      if (now - last < 42) return; // ~24 fps
+      last = now;
+      draw(now / 1000);
+    };
+    return {
+      cols: COLS,
+      rows: ROWS,
+      still() { draw(1); }, // a fixed, nicely angled frame
+      start() { if (!running && !reduced) { running = true; raf = requestAnimationFrame(loop); } },
+      stop() { running = false; cancelAnimationFrame(raf); },
+    };
+  }
+
+  // the two mini terminals under the main one
+  function mountPanels() {
+    const pp = document.getElementById("portraitPre"), wp = document.getElementById("wordmarkPre");
+    if (!pp || !wp) return;
+    const wm = wordmark3D(wp);
+    const fit = () => {
+      if (PORTRAIT) fitFont(pp, PORTRAIT.cols, PORTRAIT.chars.length, 12, 1.1, pp.parentElement.clientWidth - 16, Infinity);
+      fitFont(wp, wm.cols, wm.rows, 14, 1.1, wp.parentElement.clientWidth - 16, Infinity);
+    };
+    fit();
+    wm.still();
+    addEventListener("resize", () => requestAnimationFrame(fit));
+    let painted = false;
+    const paint = () => { if (PORTRAIT && !painted) { painted = true; paintPortrait(pp, !reduced); } };
+    if (!("IntersectionObserver" in window)) { paint(); wm.start(); return; }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.target === wp) e.isIntersecting ? wm.start() : wm.stop(); // only spin while on screen
+        else if (e.isIntersecting) paint(); // reveal the portrait the first time it scrolls into view
+      });
+    }, { threshold: 0.2 });
+    io.observe(pp);
+    io.observe(wp);
   }
 
   // ---- matrix -------------------------------------------------------------
   const GLYPHS = "01عبدالحمي<>/{}[]#*"; // 0 1 + "عبدالحميد"
   let matrix = null;
+  let termWordmark = null;
 
   function startMatrix() {
     const ctx = $canvas.getContext("2d");
@@ -383,19 +538,26 @@
       line(dim("Let's connect and build something impactful."));
     },
     async photo() {
-      if (!SNAP || !SNAP.portrait) return line(dim("portrait unavailable"));
-      const art = SNAP.portrait;
+      if (!PORTRAIT) return line(dim("portrait unavailable"));
       const pre = document.createElement("pre");
-      pre.className = "ascii";
+      pre.className = "portrait";
       pre.setAttribute("role", "img");
       pre.setAttribute("aria-label", "ASCII self-portrait of Abdelhamid");
-      fitFont(pre, Math.max(...art.map((r) => r.length)), art.length, 11);
+      fitFont(pre, PORTRAIT.cols, PORTRAIT.chars.length, 11);
       lineNode(pre);
-      for (const row of art) {
-        pre.textContent += row + "\n";
-        scrollDown();
-        if (!reduced) await sleep(26);
-      }
+      await paintPortrait(pre, !reduced);
+    },
+    wordmark() {
+      if (termWordmark) termWordmark.stop(); // only the latest one keeps spinning
+      const pre = document.createElement("pre");
+      pre.className = "wordmark";
+      pre.setAttribute("role", "img");
+      pre.setAttribute("aria-label", `Rotating 3D ASCII wordmark: ${WORDMARK}`);
+      lineNode(pre);
+      termWordmark = wordmark3D(pre);
+      fitFont(pre, termWordmark.cols, termWordmark.rows, 13);
+      termWordmark.still();
+      termWordmark.start();
     },
     async streak() {
       const d = await getData();
@@ -434,7 +596,7 @@
       pre.className = "banner in-term";
       pre.textContent = src.textContent;
       const rows = src.textContent.split("\n");
-      fitFont(pre, Math.max(...rows.map((r) => r.length)), rows.length, 12);
+      fitFont(pre, Math.max(...rows.map((r) => r.length)), rows.length, 12, 1.15);
       lineNode(pre);
     },
     open([target = ""]) {
@@ -574,6 +736,7 @@
     lineNode(statCards());
     blank();
     run("whoami", false);
+    mountPanels();
     sync();
     $in.focus({ preventScroll: true });
   }

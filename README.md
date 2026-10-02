@@ -14,7 +14,8 @@ Type `help`, or click the commands in the output.
 | `contributions` | live GitHub contribution heatmap (hover or tap a cell) |
 | `streak` | current / longest streak, best day |
 | `contact` | how to reach me |
-| `photo` | ASCII self-portrait |
+| `photo` | colored ASCII self-portrait |
+| `wordmark` | rotating 3D ASCII wordmark |
 | `matrix` | toggle the rain |
 | `clear` | clear the terminal |
 
@@ -27,7 +28,9 @@ Extras: `Tab` completes, `↑`/`↓` browse history, `Ctrl+L` clears, plus `bann
 | `index.html` | page shell: banner, terminal window, footer |
 | `style.css` | all styles |
 | `app.js` | terminal logic **and all content**, edit the constants at the top (`LINKS`, `WHOAMI`, `JOBS`, `EDU`, `SKILLS`, `PROJECTS`) |
-| `data.js` | baked fallbacks: a contribution snapshot and the ASCII portrait |
+| `data.js` | baked data: a contribution snapshot (fallback) and the colored ASCII portrait (background removed; only this rendering is published, not the photo) |
+
+Under the terminal, the `whoami` section shows two mini terminals: the portrait (`./portrait.sh`) and a 3D wordmark (`./wordmark.sh --3d`). The wordmark is real geometry: the text is rasterised, extruded, rotated, lit and z-buffered into characters in the browser. Change its text with `WORDMARK` at the top of `app.js`. It only animates while on screen, and not at all with *reduce motion* enabled.
 
 ## Data
 
