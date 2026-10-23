@@ -77,7 +77,8 @@
   ];
 
   const JOBS = [
-    ["Started Nov 2025", "DevOps Project Manager (former role)", "Be Ys, Casablanca", "Led a 7-engineer team across sprints, CI/CD and incident response. French sovereign cloud for regulated industries."],
+    ["Oct 2026 – Present", "Layoff / position eliminated", "Career break", "Exploring AI voice cloning and voice generation while seeking remote full-time roles and freelance projects in DevOps, software development, automation, and AI."],
+    ["Nov 2025 – Oct 2026", "DevOps Project Manager", "Be Ys, Casablanca", "Led a 7-engineer team across sprints, CI/CD and incident response. French sovereign cloud for regulated industries."],
     ["Oct 2025", "Energy Solutions Specialist", "Intelcia → ENGIE", "Client billing and commercial products support, 40–50 bilingual calls daily as top performer."],
     ["May 2025 – Oct 2025", "DevOps Consultant", "IO Solutions → Rogers Communications", "Designed a president-approved IT solution."],
     ["Nov 2024 – Apr 2025", "DevOps Engineer (Internship)", "Tersea Groupe → Deskea", "Migrated a 24-container stack to Kubernetes on AWS: −15% costs, +10% performance."],
@@ -92,20 +93,19 @@
   ];
 
   const SKILLS = [
-    ["management", ["Jira", "Confluence", "Notion", "Trello", "Agile", "Scrum", "Kanban", "Sprint Planning", "Team Leadership", "KPI", "SLA", "Backlog", "Incident & Priority Management", "IT Governance"]],
-    ["devops", ["Docker", "Kubernetes", "Helm", "Terraform", "Ansible", "IaC", "Bash", "Shell Scripting", "YAML", "Cron Jobs", "GitLab CI", "CI/CD", "Git", "GitHub", "GitLab", "Bitbucket", "Code Review", "Merge Requests", "Branch Management", "Blue-Green", "Canary", "Staging Releases", "Rollback Strategies"]],
-    ["cloud", ["Azure", "AWS", "GCP", "OVHcloud", "Oracle Cloud", "Huawei Cloud", "EKS", "AKS", "S3", "Linux", "Sovereign Cloud", "Multi-cloud", "Cloud Architecture", "Capacity Planning"]],
-    ["net / security", ["Nginx", "Traefik", "Load Balancing", "VPN", "Firewall", "DNS", "SSL/TLS", "Zero Trust", "OAuth 2.0", "RBAC", "IAM", "Active Directory", "GPO", "Keycloak", "HashiCorp Vault", "Secrets Management"]],
-    ["observability", ["Prometheus", "Grafana", "Tempo", "Elasticsearch", "Logstash", "Kibana", "OpenTelemetry", "Splunk", "Zabbix", "Nagios", "Shinken", "Netdata", "SLI/SLO", "Error Tracking", "Health Checks"]],
-    ["data / kpi", ["Odoo", "SAP", "GLPI", "PostgreSQL", "MySQL", "MongoDB", "MariaDB", "Supabase", "Firebase", "Redis", "Kafka", "Celery", "ETL Pipelines", "Superset", "Tableau", "Power BI", "Snowflake", "Databricks", "Data Visualization", "Reporting Automation"]],
-    ["ai / automation", ["Python", "FastAPI", "Node.js", "TypeScript", "REST API", "GraphQL", "Swagger", "Postman", "Web Scraping", "OpenAI API", "Anthropic API", "Chrome API", "LangChain", "LangGraph", "Hugging Face", "Ollama", "ChromaDB", "RAG", "Fine Tuning", "Prompt Engineering", "Agentic AI", "MLOps", "NLP", "LLMs", "Copilot Studio", "Power Automate", "n8n", "Zapier", "Microsoft 365", "SharePoint", "Teams", "WhatsApp"]],
-    ["soft skills", ["Problem Solving", "Critical Thinking", "Decision Making", "Adaptability", "Fast Learning", "Attention to Detail", "Empathy", "Active Listening", "Conflict Resolution", "Emotional Intelligence"]],
+    ["Leadership & Delivery", ["Jira", "Confluence", "Notion", "Trello", "Agile", "Scrum", "Kanban", "Sprint Planning", "Team Leadership", "KPI", "SLA", "Backlog", "Incident & Priority Management", "IT Governance"]],
+    ["DevOps & CI/CD", ["Docker", "Kubernetes", "Helm", "Terraform", "Ansible", "IaC", "Bash", "Shell Scripting", "YAML", "Cron Jobs", "GitLab CI", "CI/CD", "Git", "GitHub", "GitLab", "Bitbucket", "Code Review", "Merge Requests", "Branch Management", "Blue-Green", "Canary", "Staging Releases", "Rollback Strategies"]],
+    ["Cloud & Infrastructure", ["Azure", "AWS", "GCP", "OVHcloud", "Oracle Cloud", "Huawei Cloud", "EKS", "AKS", "S3", "Linux", "Sovereign Cloud", "Multi-cloud", "Cloud Architecture", "Capacity Planning"]],
+    ["Networking & Security", ["Nginx", "Traefik", "Load Balancing", "VPN", "Firewall", "DNS", "SSL/TLS", "Zero Trust", "OAuth 2.0", "RBAC", "IAM", "Active Directory", "GPO", "Keycloak", "HashiCorp Vault", "Secrets Management"]],
+    ["Monitoring & Observability", ["Prometheus", "Grafana", "Tempo", "Elasticsearch", "Logstash", "Kibana", "OpenTelemetry", "Splunk", "Zabbix", "Nagios", "Shinken", "Netdata", "SLI/SLO", "Error Tracking", "Health Checks"]],
+    ["Data & Analytics", ["Odoo", "SAP", "GLPI", "PostgreSQL", "MySQL", "MongoDB", "MariaDB", "Supabase", "Firebase", "Redis", "Kafka", "Celery", "ETL Pipelines", "Superset", "Tableau", "Power BI", "Snowflake", "Databricks", "Data Visualization", "Reporting Automation"]],
+    ["AI & Automation", ["Python", "FastAPI", "Node.js", "TypeScript", "REST API", "GraphQL", "Swagger", "Postman", "Web Scraping", "OpenAI API", "Anthropic API", "Chrome API", "LangChain", "LangGraph", "Hugging Face", "Ollama", "ChromaDB", "RAG", "Fine Tuning", "Prompt Engineering", "Agentic AI", "MLOps", "NLP", "LLMs", "Copilot Studio", "Power Automate", "n8n", "Zapier", "Microsoft 365", "SharePoint", "Teams", "WhatsApp"]],
+    ["Collaboration & Problem Solving", ["Problem Solving", "Critical Thinking", "Decision Making", "Adaptability", "Fast Learning", "Attention to Detail", "Empathy", "Active Listening", "Conflict Resolution", "Emotional Intelligence"]],
   ];
 
   const PROJECTS = [
     ["Portfolio", "Personal site built with Next.js, available in 6 languages", LINKS.portfolio],
     ["GitHub profile", "Terminal-style profile README, SVG art regenerated every 3h by GitHub Actions + Python", `https://github.com/${USER}/${USER}`],
-    ["anom", "Agentic AI universe platform", `https://github.com/${USER}/anom`],
   ];
 
   // ---- contribution data --------------------------------------------------
@@ -529,7 +529,6 @@
         line(`  ${dim(esc(desc))}`);
         line(`  ${ext(url, url)}`);
       });
-      line(`${dim("more on")} ${ext(LINKS.github, "github.com/" + USER)}`);
     },
     contact() {
       const row = (k, a) => line(`<span class="out-white">${k.padEnd(11)}</span>${a}`);
