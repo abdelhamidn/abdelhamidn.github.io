@@ -429,7 +429,7 @@
     };
   }
 
-  // portrait and wordmark inside the shared terminal frame
+  // the two mini terminals under the main one
   function mountPanels() {
     const pp = document.getElementById("portraitPre"), wp = document.getElementById("wordmarkPre");
     if (!pp || !wp) return;
@@ -725,7 +725,7 @@
   // typing anywhere on the page goes to the prompt
   document.addEventListener("keydown", (e) => {
     if (e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return;
-    if (document.activeElement && /^(INPUT|TEXTAREA|SELECT|BUTTON|A)$/.test(document.activeElement.tagName)) return;
+    if (document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) return;
     $in.focus({ preventScroll: true });
   });
 
