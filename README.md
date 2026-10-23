@@ -30,7 +30,7 @@ Extras: `Tab` completes, `↑`/`↓` browse history, `Ctrl+L` clears, plus `bann
 | `app.js` | terminal logic **and all content**, edit the constants at the top (`LINKS`, `WHOAMI`, `JOBS`, `EDU`, `SKILLS`, `PROJECTS`) |
 | `data.js` | baked data: a contribution snapshot (fallback) and the colored ASCII portrait (background removed; only this rendering is published, not the photo) |
 
-Under the terminal, the `whoami` section shows two mini terminals: the portrait (`./portrait.sh`) and a 3D wordmark (`./wordmark.sh --3d`). The wordmark is real geometry: the text is rasterised, extruded, rotated, lit and z-buffered into characters in the browser. Change its text with `WORDMARK` at the top of `app.js`. It only animates while on screen, and not at all with *reduce motion* enabled.
+Command instructions and accessible shortcut buttons sit above the terminal. The portrait and animated 3D wordmark share its frame, side by side on desktop and stacked on mobile. The wordmark is real geometry: the text is rasterised, extruded, rotated, lit and z-buffered into characters in the browser. Change its text with `WORDMARK` at the top of `app.js`. It only animates while on screen, and not at all with *reduce motion* enabled.
 
 ## Data
 

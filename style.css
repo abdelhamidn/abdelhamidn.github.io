@@ -31,7 +31,7 @@ a:hover, a:focus-visible { text-decoration: underline; }
 .term { padding: 16px; min-height: 360px; max-height: 60vh; overflow-y: auto; overscroll-behavior: contain; font-size: 13.5px; line-height: 1.55; scrollbar-color: var(--frame) transparent; }
 @supports (height: 1dvh) { .term { max-height: 60dvh; } }
 .line { white-space: pre-wrap; word-break: break-word; }
-.prompt-line { display: flex; gap: 8px; margin-top: 8px; }
+.prompt-line { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 .term > .prompt-line:first-child { margin-top: 0; }
 .prompt-tag { color: var(--green); flex-shrink: 0; white-space: nowrap; }
 .prompt-line > .out-white { min-width: 0; }
@@ -63,6 +63,12 @@ a:hover, a:focus-visible { text-decoration: underline; }
 @keyframes blink { 50% { background: transparent; color: var(--white); } }
 
 .hint { text-align: center; color: var(--muted); font-size: 12px; margin: 10px 0 0; }
+.terminal-guide { margin: 0 0 16px; text-align: center; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.terminal-guide p { margin: 0 0 10px; }
+.command-shortcuts { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.command-shortcuts button { min-height: 44px; padding: 8px 12px; font: inherit; color: var(--white); background: var(--bg2); border: 1px solid var(--frame); border-radius: 6px; }
+.command-shortcuts button:hover { border-color: var(--green); color: var(--green); }
+.command-shortcuts button:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
 .hint kbd { background: var(--bg2); border: 1px solid var(--frame); border-radius: 4px; padding: 1px 6px; color: var(--white); font-family: inherit; }
 .hint kbd[data-cmd]:hover { border-color: var(--green); }
 
@@ -88,21 +94,17 @@ a:hover, a:focus-visible { text-decoration: underline; }
 .banner.in-term { color: var(--green); line-height: 1.15; }
 .wordmark { color: var(--white); }
 
-/* ---- whoami panels: two mini terminals --------------------------------- */
-.whoami { margin-top: 28px; }
-.pill { display: table; margin: 0 auto 14px; padding: 3px 10px; background: var(--bg2); border: 1px solid var(--frame); border-radius: 6px; font: 700 14px/1.5 var(--mono); color: var(--white); }
-.panels { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--frame); border-radius: 10px; }
-.panel { display: flex; min-width: 0; padding: 12px; }
-.panel + .panel { border-left: 1px solid var(--frame); }
-.panel .window { display: flex; flex: 1; flex-direction: column; min-width: 0; box-shadow: none; }
-.panel .titlebar .label { position: static; flex: 1; margin-right: 44px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.mini-body { display: flex; flex: 1; align-items: center; justify-content: center; min-height: 0; padding: 10px 8px; }
-.mini-foot { padding: 4px 14px 12px; font-size: 11.5px; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* ---- integrated terminal artwork --------------------------------------- */
+.terminal-art { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--frame); }
+.art-panel { display: flex; flex-direction: column; min-width: 0; margin: 0; padding: 16px; }
+.art-panel + .art-panel { border-left: 1px solid var(--frame); }
+.mini-body { display: flex; flex: 1; align-items: center; justify-content: center; min-width: 0; min-height: 0; padding: 10px 8px; }
+.art-panel figcaption { text-align: center; color: var(--muted); font-size: 11px; margin-top: 10px; }
 .mini-body .portrait, .mini-body .wordmark { margin: 0; }
-@media (max-width: 700px) {
-  .panels { grid-template-columns: 1fr; }
-  .panel + .panel { border-left: 0; border-top: 1px solid var(--frame); }
-  .panel .titlebar .label { margin-right: 0; font-size: 11px; }
+@media (max-width: 600px) {
+  .terminal-art { grid-template-columns: minmax(0, 1fr); }
+  .art-panel + .art-panel { border-left: 0; border-top: 1px solid var(--frame); }
+  .art-panel { padding: 12px; }
 }
 
 /* ---- footer -------------------------------------------------------------- */
@@ -116,5 +118,5 @@ body.matrix #matrixCanvas { display: block; }
 body.matrix .window { background: rgba(13, 17, 23, .82); }
 body.matrix .titlebar { background: rgba(22, 27, 34, .92); }
 
-@media (max-width: 520px) { .term, .inputRow { font-size: 12.5px; } }
+@media (max-width: 520px) { .term, .inputRow { font-size: 12.5px; } .inputRow { flex-wrap: wrap; } .inputRow .field { flex-basis: 100%; } .term { min-height: min(360px, 55svh); } }
 @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } .cell { transition: none; } }
