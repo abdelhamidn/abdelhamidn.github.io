@@ -67,15 +67,17 @@
   ];
 
   const WHOAMI = [
-    ["out-white", "Engineer driven by curiosity and innovation, turning complex challenges into AI-powered, scalable solutions through multicloud expertise and a passion for deep learning."],
-    ["out-dim", "Currently: DevOps Project Manager @ Be Ys (7-engineer team · French sovereign cloud)"],
-    ["out-dim", "Past: DevOps Consultant @ IO Solutions → Rogers · DevOps Engineer @ Tersea → Deskea, Brams → Deeplinq, Sekera → SecDojo"],
-    ["out-dim", "Highlights: $100K GCP Startups Program award · 80% productivity gain via helpdesk automation · K8s on AWS migration (−15% costs)"],
+    ["out-white", "DevOps engineer building reliable cloud infrastructure, automating workflows, and developing AI-powered applications."],
+    ["out-green", "Open to work: Remote full-time roles and freelance projects in DevOps, software development, automation, and AI."],
+    ["out-dim", "Current focus: AI voice cloning and voice generation · Open to opportunities across industries."],
+    ["out-dim", "Previously: DevOps Project Manager @ Be Ys · Led a 7-engineer team working on a French sovereign cloud."],
+    ["out-dim", "Earlier: DevOps Consultant @ IO Solutions → Rogers · DevOps Engineer @ Tersea → Deskea, Brams → Deeplinq, Sekera → SecDojo"],
+    ["out-dim", "Highlights: $100K GCP Startups Program award · 80% productivity gain via helpdesk automation · Kubernetes on AWS migration (−15% costs)"],
     ["out-dim", "Casablanca, Morocco · Arabic (native) · English · French"],
   ];
 
   const JOBS = [
-    ["Nov 2025 – Present", "DevOps Project Manager", "Be Ys, Casablanca", "Leading a 7-engineer team across sprints, CI/CD and incident response. French sovereign cloud for regulated industries."],
+    ["Started Nov 2025", "DevOps Project Manager (former role)", "Be Ys, Casablanca", "Led a 7-engineer team across sprints, CI/CD and incident response. French sovereign cloud for regulated industries."],
     ["Oct 2025", "Energy Solutions Specialist", "Intelcia → ENGIE", "Client billing and commercial products support, 40–50 bilingual calls daily as top performer."],
     ["May 2025 – Oct 2025", "DevOps Consultant", "IO Solutions → Rogers Communications", "Designed a president-approved IT solution."],
     ["Nov 2024 – Apr 2025", "DevOps Engineer (Internship)", "Tersea Groupe → Deskea", "Migrated a 24-container stack to Kubernetes on AWS: −15% costs, +10% performance."],
